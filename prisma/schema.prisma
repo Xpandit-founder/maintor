@@ -1,0 +1,456 @@
+// prisma/schema.prisma
+// MAINTOR - Complete Database Schema
+// Using Neon Postgres with pgvector extension
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [vector]
+}
+
+// ============================================
+// USER & AUTHENTICATION
+// ============================================
+
+model User {
+  id            String   @id @default(cuid())
+  clerkId       String   @unique
+  email         String   @unique
+  firstName     String?
+  lastName      String?
+  imageUrl      String?
+  role          UserRole @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  xp              UserXP?
+  medals          UserMedal[]
+  achievements    UserAchievement[]
+  lessonProgress  LessonProgress[]
+  subscription    Subscription?
+  supportRequests SupportRequest[]
+
+  @@index([clerkId])
+  @@index([email])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+// ============================================
+// GAMIFICATION - XP & LEVELS
+// ============================================
+
+model UserXP {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  totalXP       Int      @default(0)
+  currentLevel  Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  xpHistory  XPHistory[]
+
+  @@index([totalXP])
+}
+
+model XPHistory {
+  id          String       @id @default(cuid())
+  userXPId    String
+  amount      Int
+  reason      XPReason
+  sourceId    String?      // lessonId, levelId, or toolId
+  sourceType  SourceType?
+  createdAt   DateTime     @default(now())
+
+  // Relations
+  userXP      UserXP       @relation(fields: [userXPId], references: [id], onDelete: Cascade)
+
+  @@index([userXPId])
+  @@index([createdAt])
+}
+
+enum XPReason {
+  LESSON_COMPLETED
+  LEVEL_COMPLETED
+  TOOL_COMPLETED
+  QUIZ_BONUS
+  STREAK_BONUS
+  ACHIEVEMENT_BONUS
+}
+
+enum SourceType {
+  LESSON
+  LEVEL
+  TOOL
+  ACHIEVEMENT
+}
+
+model LevelThreshold {
+  id         String   @id @default(cuid())
+  level      Int      @unique
+  xpRequired Int
+  title      String   // e.g., "Novice", "Apprentice", "Expert"
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ============================================
+// GAMIFICATION - MEDALS & ACHIEVEMENTS
+// ============================================
+
+model Medal {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  type        MedalType
+  imageUrl    String?
+  xpBonus     Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  userMedals  UserMedal[]
+}
+
+enum MedalType {
+  BRONZE      // Beginner level complete
+  SILVER      // Pro level complete
+  GOLD        // Master level complete
+  TOOL_MASTER // Full tool complete
+  GRANDMASTER // All tools complete
+  SPECIAL     // Special achievements
+}
+
+model UserMedal {
+  id        String   @id @default(cuid())
+  userId    String
+  medalId   String
+  toolId    String?  // Which tool this medal is for
+  levelId   String?  // Which level this medal is for
+  earnedAt  DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  medal     Medal    @relation(fields: [medalId], references: [id], onDelete: Cascade)
+  tool      Tool?    @relation(fields: [toolId], references: [id], onDelete: SetNull)
+  level     Level?   @relation(fields: [levelId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, medalId, toolId, levelId])
+  @@index([userId])
+}
+
+model Achievement {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  description String
+  imageUrl    String?
+  xpReward    Int              @default(0)
+  criteria    Json             // Flexible criteria definition
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  progress      Int         @default(0)  // For progressive achievements
+  completed     Boolean     @default(false)
+  completedAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+// ============================================
+// LEARNING CONTENT - TOOLS, LEVELS, LESSONS
+// ============================================
+
+model Tool {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  slug        String      @unique
+  description String
+  longDescription String? @db.Text
+  category    ToolCategory
+  imageUrl    String?
+  iconUrl     String?
+  color       String?     // Brand color hex
+  websiteUrl  String?
+  isPublished Boolean     @default(false)
+  isFree      Boolean     @default(false) // Free tier access
+  sortOrder   Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  levels      Level[]
+  userMedals  UserMedal[]
+
+  @@index([slug])
+  @@index([category])
+  @@index([isPublished])
+}
+
+enum ToolCategory {
+  TEXT_AI        // ChatGPT, Claude, etc.
+  IMAGE_AI       // Midjourney, DALL-E, etc.
+  VIDEO_AI       // Runway, Pika, etc.
+  AUDIO_AI       // ElevenLabs, Suno, etc.
+  CODE_AI        // GitHub Copilot, Cursor, etc.
+  PRODUCTIVITY   // Notion AI, etc.
+  RESEARCH       // Perplexity, etc.
+  OTHER
+}
+
+model Level {
+  id          String     @id @default(cuid())
+  toolId      String
+  name        LevelName
+  description String?
+  sortOrder   Int        @default(0)
+  xpBonus     Int        @default(200)  // XP for completing level
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  tool        Tool       @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+  userMedals  UserMedal[]
+
+  @@unique([toolId, name])
+  @@index([toolId])
+}
+
+enum LevelName {
+  BEGINNER
+  PRO
+  MASTER
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  levelId     String
+  title       String
+  slug        String
+  description String?
+  content     String   @db.Text  // Markdown content
+  videoUrl    String?
+  videoDuration Int?   // Duration in seconds
+  resources   Json?    // Array of resource links
+  quizData    Json?    // Quiz questions and answers
+  xpReward    Int      @default(25)
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  level           Level            @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  lessonProgress  LessonProgress[]
+  files           FileUpload[]
+
+  @@unique([levelId, slug])
+  @@index([levelId])
+  @@index([isPublished])
+}
+
+model LessonProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  lessonId    String
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+  quizScore   Int?
+  videoProgress Int     @default(0)  // Percentage watched
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+}
+
+// ============================================
+// CHATBOT & SUPPORT
+// ============================================
+
+model FAQEntry {
+  id          String   @id @default(cuid())
+  question    String
+  answer      String   @db.Text
+  category    String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  embedding   FAQEmbedding?
+}
+
+model FAQEmbedding {
+  id          String                      @id @default(cuid())
+  faqEntryId  String                      @unique
+  embedding   Unsupported("vector(1536)") // OpenAI ada-002 dimensions
+  createdAt   DateTime                    @default(now())
+  updatedAt   DateTime                    @updatedAt
+
+  // Relations
+  faqEntry    FAQEntry                    @relation(fields: [faqEntryId], references: [id], onDelete: Cascade)
+}
+
+model SupportRequest {
+  id          String        @id @default(cuid())
+  userId      String?
+  email       String
+  question    String        @db.Text
+  status      SupportStatus @default(PENDING)
+  ticketId    String        @unique @default(cuid())
+  response    String?       @db.Text
+  respondedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  user        User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([ticketId])
+  @@index([status])
+  @@index([userId])
+}
+
+enum SupportStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+// ============================================
+// SUBSCRIPTIONS & BILLING
+// ============================================
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String             @unique
+  stripeCustomerId     String?            @unique
+  stripeSubscriptionId String?            @unique
+  stripePriceId        String?
+  plan                 SubscriptionPlan   @default(FREE)
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  // Relations
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([stripeCustomerId])
+  @@index([stripeSubscriptionId])
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  UNPAID
+}
+
+// ============================================
+// FILE UPLOADS & STORAGE
+// ============================================
+
+model FileUpload {
+  id          String     @id @default(cuid())
+  name        String
+  key         String     @unique  // R2/UploadThing key
+  url         String
+  size        Int
+  type        String     // MIME type
+  category    FileCategory
+  lessonId    String?
+  uploadedBy  String?    // User ID who uploaded
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  lesson      Lesson?    @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  @@index([key])
+  @@index([lessonId])
+  @@index([category])
+}
+
+enum FileCategory {
+  VIDEO
+  IMAGE
+  DOCUMENT
+  RESOURCE
+  OTHER
+}
+
+// ============================================
+// ANALYTICS & TRACKING
+// ============================================
+
+model UserActivity {
+  id        String       @id @default(cuid())
+  userId    String
+  type      ActivityType
+  metadata  Json?
+  createdAt DateTime     @default(now())
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+enum ActivityType {
+  LOGIN
+  LESSON_VIEW
+  LESSON_COMPLETE
+  LEVEL_COMPLETE
+  TOOL_COMPLETE
+  ACHIEVEMENT_EARNED
+  MEDAL_EARNED
+  SUBSCRIPTION_CHANGE
+}
