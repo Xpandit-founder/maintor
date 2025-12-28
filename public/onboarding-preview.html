@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Maintor - Onboarding Preview</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif; background: #0F1110; min-height: 100vh; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slide-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slide-in { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes pop { 0% { transform: scale(0); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    @keyframes antenna-blink { 0%, 90%, 100% { opacity: 0.5; } 95% { opacity: 1; } }
+    @keyframes wave { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+    @keyframes pulse-text { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .animate-fade-in { animation: fade-in 0.5s ease-out forwards; opacity: 0; }
+    .animate-slide-up { animation: slide-up 0.4s ease-out forwards; opacity: 0; }
+    .animate-slide-in { animation: slide-in 0.4s ease-out forwards; opacity: 0; }
+    .animate-pop { animation: pop 0.4s ease-out forwards; }
+    .animate-pulse-text { animation: pulse-text 1.5s ease-in-out infinite; }
+    .btn { transition: all 0.15s ease; cursor: pointer; border: none; outline: none; }
+    .btn:hover:not(:disabled) { transform: scale(1.02); }
+    .btn:active:not(:disabled) { transform: scale(0.98) translateY(2px); }
+    .btn:disabled { cursor: not-allowed; opacity: 0.5; }
+    .input-field { transition: all 0.2s ease; }
+    .input-field:focus { border-color: #10B981 !important; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); outline: none; }
+    .input-field::placeholder { color: #6B7280; }
+    .option-card { transition: all 0.15s ease; cursor: pointer; }
+    .option-card:hover { transform: translateX(4px); background: rgba(16, 185, 129, 0.1) !important; }
+    .social-btn { transition: all 0.15s ease; }
+    .social-btn:hover { background: #252829 !important; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    #app { min-height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const C = { primary: '#10B981', primaryDark: '#059669', primaryDarker: '#047857', primaryGlow: 'rgba(16, 185, 129, 0.15)', bgDark: '#0F1110', bgCard: '#1A1D1E', bgElevated: '#252829', border: '#2A2D2E', text: '#FFFFFF', textSecondary: '#9CA3AF', textMuted: '#6B7280', accent: '#38BDF8', error: '#EF4444', sand: '#FCD34D' };
+
+    let step = 0, whatToLearn = '', whyLearning = '', experience = '', dailyGoal = '', howHeard = '';
+
+    function robotMascot(size = 120, emotion = 'default', animate = true) {
+      const floatClass = animate ? 'animate-float' : '';
+      const isExcited = emotion === 'excited';
+      return '<div class="relative ' + floatClass + '" style="width:' + size + 'px;height:' + (size * 1.2) + 'px"><svg viewBox="0 0 200 240" fill="none"><g style="transform-origin: 140px 45px;' + (animate ? 'animation: wave 2s ease-in-out infinite;' : '') + '"><line x1="140" y1="45" x2="165" y2="15" stroke="#10B981" stroke-width="4" stroke-linecap="round"/><circle cx="165" cy="15" r="8" fill="#10B981"/><circle cx="165" cy="15" r="5" fill="#34D399" style="animation: antenna-blink 2s ease-in-out infinite;"/></g><ellipse cx="100" cy="95" rx="55" ry="50" fill="#1A1D1E" stroke="#2A2D2E" stroke-width="3"/>' + (isExcited ? '<text x="62" y="105" font-size="28" fill="#10B981">★</text><text x="108" y="105" font-size="28" fill="#10B981">★</text>' : '<circle cx="75" cy="90" r="12" fill="#0F1110"/><circle cx="125" cy="90" r="12" fill="#0F1110"/><circle cx="75" cy="90" r="8" fill="#10B981"/><circle cx="125" cy="90" r="8" fill="#10B981"/><circle cx="72" cy="87" r="3" fill="white" opacity="0.8"/><circle cx="122" cy="87" r="3" fill="white" opacity="0.8"/>') + '<path d="M 80 115 Q 100 ' + (isExcited ? '135' : '130') + ' 120 115" stroke="#10B981" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M 60 145 Q 60 180 80 200 L 120 200 Q 140 180 140 145 Z" fill="#1A1D1E" stroke="#2A2D2E" stroke-width="3"/><ellipse cx="85" cy="215" rx="18" ry="12" fill="#1A1D1E" stroke="#2A2D2E" stroke-width="2"/><ellipse cx="115" cy="215" rx="18" ry="12" fill="#1A1D1E" stroke="#2A2D2E" stroke-width="2"/></svg></div>';
+    }
+
+    function smallMascot(size = 50) {
+      return '<div style="width:' + size + 'px;height:' + size + 'px"><svg viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="50" rx="35" ry="32" fill="#1A1D1E" stroke="#2A2D2E" stroke-width="3"/><circle cx="38" cy="48" r="6" fill="#0F1110"/><circle cx="62" cy="48" r="6" fill="#0F1110"/><circle cx="38" cy="48" r="4" fill="#10B981"/><circle cx="62" cy="48" r="4" fill="#10B981"/><circle cx="36" cy="46" r="1.5" fill="white" opacity="0.8"/><circle cx="60" cy="46" r="1.5" fill="white" opacity="0.8"/><path d="M 40 62 Q 50 70 60 62" stroke="#10B981" stroke-width="3" fill="none" stroke-linecap="round"/><line x1="70" y1="25" x2="80" y2="10" stroke="#10B981" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="10" r="5" fill="#10B981"/><circle cx="80" cy="10" r="3" fill="#34D399"/></svg></div>';
+    }
+
+    function bubble(text, delay) {
+      delay = delay || 0;
+      return '<div class="relative animate-fade-in" style="animation-delay:' + delay + 's"><div class="relative px-6 py-4 rounded-2xl" style="background:' + C.bgCard + ';border:1px solid ' + C.border + '"><p class="text-lg leading-relaxed text-center" style="color:' + C.text + '">' + text + '</p></div><div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45" style="background:' + C.bgCard + ';border-right:1px solid ' + C.border + ';border-bottom:1px solid ' + C.border + '"></div></div>';
+    }
+
+    function progressBar(pct) {
+      return '<div class="w-full h-3 rounded-full overflow-hidden" style="background:' + C.bgElevated + '"><div class="h-full rounded-full transition-all duration-500" style="width:' + pct + '%;background:linear-gradient(90deg, ' + C.primary + ', ' + C.primaryDark + ')"></div></div>';
+    }
+
+    function primaryBtn(text, action, disabled) {
+      return '<button class="btn w-full py-4 rounded-2xl font-bold text-base uppercase tracking-wider" style="background:' + (disabled ? C.bgElevated : 'linear-gradient(135deg, ' + C.primary + ' 0%, ' + C.primaryDark + ' 100%)') + ';color:' + (disabled ? C.textMuted : 'white') + ';box-shadow:' + (disabled ? 'none' : '0 4px 0 ' + C.primaryDarker) + '" onclick="' + action + '"' + (disabled ? ' disabled' : '') + '>' + text + '</button>';
+    }
+
+    function header(showBack, totalSteps) {
+      showBack = showBack !== false;
+      totalSteps = totalSteps || 10;
+      var pct = Math.min(100, (step / totalSteps) * 100);
+      return '<div class="sticky top-0 z-50 px-4 pt-4 pb-2" style="background:' + C.bgDark + '"><div class="flex items-center gap-4 max-w-lg mx-auto">' + (showBack ? '<button onclick="goBack()" class="p-2 -ml-2" style="color:' + C.textMuted + '"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>' : '') + '<div class="flex-1">' + progressBar(pct) + '</div></div></div>';
+    }
+
+    function welcomeScreen() {
+      return '<div class="min-h-screen flex flex-col items-center justify-center p-6" style="background:' + C.bgDark + '"><div class="flex-1 flex flex-col items-center justify-center"><div class="animate-pop">' + robotMascot(180, 'default', true) + '</div><h1 class="text-4xl font-bold mt-4 animate-fade-in" style="color:' + C.primary + ';animation-delay:0.2s">maintor</h1><p class="text-lg mt-2 animate-fade-in" style="color:' + C.textMuted + ';animation-delay:0.3s">Learn AI. For free. Forever.</p></div><div class="w-full max-w-sm space-y-3 animate-fade-in" style="animation-delay:0.4s">' + primaryBtn('Get Started', 'goNext()') + '<button class="btn w-full py-4 rounded-2xl font-bold text-base uppercase tracking-wider border-2" style="border-color:' + C.primary + ';color:' + C.primary + ';background:transparent">I Already Have An Account</button></div></div>';
+    }
+
+    function introScreen(msg, highlight) {
+      var displayMsg = msg;
+      if (highlight) displayMsg = msg.replace(highlight, '<span style="color:' + C.sand + ';font-weight:bold">' + highlight + '</span>');
+      return '<div class="min-h-screen flex flex-col" style="background:' + C.bgDark + '">' + header() + '<div class="flex-1 flex flex-col items-center justify-center p-6"><div class="max-w-sm">' + bubble(displayMsg) + '<div class="mt-6 flex justify-center">' + robotMascot(140, 'default', true) + '</div></div></div><div class="p-6"><div class="max-w-sm mx-auto">' + primaryBtn('Continue', 'goNext()') + '</div></div></div>';
+    }
+
+    function whatToLearnScreen() {
+      var opts = [{id:'chatbots',icon:'💬',label:'AI Chatbots',sub:'ChatGPT, Claude'},{id:'images',icon:'🎨',label:'Image Generation',sub:'Midjourney, DALL·E'},{id:'writing',icon:'✍️',label:'AI Writing',sub:'Content & docs'},{id:'coding',icon:'💻',label:'AI Coding',sub:'Copilot, Cursor'},{id:'productivity',icon:'⚡',label:'Productivity',sub:'Automation'},{id:'all',icon:'🎯',label:'Everything!',sub:'Complete journey'}];
+      return '<div class="min-h-screen flex flex-col" style="background:' + C.bgDark + '">' + header() + '<div class="flex-1 flex flex-col p-6 pt-2 overflow-hidden"><div class="flex items-start gap-3 mb-4"><div class="flex-shrink-0">' + smallMascot(50) + '</div><div class="flex-1">' + bubble('What would you like to learn?', 0.1) + '</div></div><div class="flex-1 space-y-2 overflow-y-auto hide-scrollbar pb-4">' + opts.map(function(o, i) { var sel = whatToLearn === o.id; return '<button onclick="setOption(\'whatToLearn\',\'' + o.id + '\')" class="option-card w-full p-4 rounded-xl flex items-center gap-4 text-left border animate-slide-in" style="background:' + (sel ? C.primaryGlow : C.bgCard) + ';border-color:' + (sel ? C.primary : C.border) + ';animation-delay:' + (0.1 + i * 0.05) + 's"><span class="text-2xl">' + o.icon + '</span><span class="font-semibold flex-1" style="color:' + (sel ? C.primary : C.text) + '">' + o.label + '</span><span class="text-sm" style="color:' + C.textMuted + '">' + o.sub + '</span></button>'; }).join('') + '</div></div><div class="p-6 pt-0"><div class="max-w-lg mx-auto">' + primaryBtn('Continue', 'goNext()', !whatToLearn) + '</div></div></div>';
+    }
+
+    function whyLearningScreen() {
+      var opts = [{id:'career',icon:'💼',label:'Boost my career'},{id:'productivity',icon:'🧠',label:'Be more productive'},{id:'fun',icon:'🎉',label:'Just for fun'},{id:'creative',icon:'🎨',label:'Creative projects'},{id:'business',icon:'📈',label:'Grow my business'},{id:'curious',icon:'🔍',label:'Stay curious'}];
+      return '<div class="min-h-screen flex flex-col" style="background:' + C.bgDark + '">' + header() + '<div class="flex-1 flex flex-col p-6 pt-2 overflow-hidden"><div class="flex items-start gap-3 mb-6"><div class="flex-shrink-0">' + smallMascot(50) + '</div><div class="flex-1">' + bubble('Why do you want to learn AI?', 0.1) + '</div></div><div class="flex-1 space-y-2 overflow-y-auto hide-scrollbar pb-4">' + opts.map(function(o, i) { var sel = whyLearning === o.id; return '<button onclick="setOption(\'whyLearning\',\'' + o.id + '\')" class="option-card w-full p-4 rounded-xl flex items-center gap-4 text-left border animate-slide-in" style="background:' + (sel ? C.primaryGlow : C.bgCard) + ';border-color:' + (sel ? C.primary : C.border) + ';animation-delay:' + (0.1 + i * 0.05) + 's"><span class="text-2xl">' + o.icon + '</span><span class="font-semibold flex-1" style="color:' + (sel ? C.primary : C.text) + '">' + o.label + '</span></button>'; }).join('') + '</div></div><div class="p-6 pt-0"><div class="max-w-lg mx-auto">' + primaryBtn('Continue', 'goNext()', !whyLearning) + '</div></div></div>';
+    }
+
+    function experienceScreen() {
+      return '<div class="min-h-screen flex flex-col" style="background:' + C.bgDark + '">' + header() + '<div class="flex-1 flex flex-col p-6 pt-2"><div class="flex items-start gap-3 mb-8"><div class="flex-shrink-0">' + smallMascot(50) + '</div><div class="flex-1">' + bubble('Where would you like to start?', 0.1) + '</div></div><div class="flex-1 space-y-4"><button onclick="setOption(\'experience\',\'beginner\')" class="option-card w-full p-4 rounded-2xl flex items-center gap-4 text-left relative overflow-hidden border animate-fade-in" style="background:' + (experience === 'beginner' ? C.primaryGlow : C.bgCard) + ';border-color:' + (experience === 'beginner' ? C.primary : C.border) + ';animation-delay:0.2s"><div class="absolute top-0 right-0 px-3 py-1 rounded-bl-xl text-xs font-bold uppercase" style="background:' + C.accent + ';color:white">Recommended</div><div class="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style="background:' + C.primaryGlow + '"><span class="text-2xl">📖</span></div><div class="flex-1"><p class="font-semibold text-base" style="color:' + (experience === 'beginner' ? C.primary : C.text) + '">Start from scratch</p><p class="text-sm mt-0.5" style="color:' + C.textMuted + '">Take the easiest lesson</p></div></button><button onclick="setOption(\'experience\',\'intermediate\')" class="option-card w-full p-4 rounded-2xl flex items-center gap-4 text-left border animate-fade-in" style="background:' + (experience === 'intermediate' ? C.primaryGlow : C.bgCard) + ';border-color:' + (experience === 'intermediate' ? C.primary : C.border) + ';animation-delay:0.3s"><div class="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style="background:' + C.primaryGlow + '"><span class="text-2xl">🧭</span></div><div class="flex-1"><p class="font-semibold text-base" style="color:' + (experience === 'intermediate' ? C.primary : C.text) + '">Find my level</p><p class="text-sm mt-0.5" style="color:' + C.textMuted + '">Let Maintor recommend</p></div></button></div></div><div class="p-6 pt-0"><div class="max-w-lg mx-auto">' + primaryBtn('Continue', 'goNext()', !experience) + '</div></div></div>';
+    }
+
+    function dailyGoalScreen() {
+      var opts = [{id:'5',label:'5 min / day',sub:'Casual'},{id:'10',label:'10 min / day',sub:'Regular'},{id:'15',label:'15 min / day',sub:'Serious'},{id:'20',label:'20 min / day',sub:'Intense'}];
+      return '<div class="min-h-screen flex flex-col" style="background:' + C.bgDark + '">' + header() + '<div class="flex-1 flex flex-col p-6 pt-2"><div class="flex items-start gap-3 mb-8"><div class="flex-shrink-0">' + smallMascot(50) + '</div><div class="flex-1">' + bubble("What's your daily learning goal?", 0.1) + '</div></div><div class="flex-1 space-y-3">' + opts.map(function(o, i) { var sel = dailyGoal === o.id; return '<button onclick="setOption(\'dailyGoal\',\'' + o.id + '\')" class="option-card w-full p-4 rounded-xl flex items-center justify-between border animate-slide-in" style="background:' + (sel ? C.primaryGlow : C.bgCard) + ';border-color:' + (sel ? C.primary : C.border) + ';animation-delay:' + (0.2 + i * 0.08) + 's"><span class="font-bold text-lg" style="color:' + (sel ? C.primary : C.text) + '">' + o.label + '</span><span style="color:' + C.textMuted + '">' + o.sub + '</span></button>'; }).join('') + '</div></div><div class="p-6 pt-0"><div class="max-w-lg mx-auto">' + primaryBtn("I'm Committed", 'goNext()', !dailyGoal) + '</div></div></div>';
+    }
+
+    function howHeardScreen() {
+      var opts = ['YouTube', 'X (Twitter)', 'TikTok', 'Friends/family', 'Google Search', 'LinkedIn', 'Other'];
+      return '<div class="min-h-screen flex flex-col" style="background:' + C.bgDark + '">' + header() + '<div class="flex-1 flex flex-col p-6 pt-2 overflow-hidden"><div class="flex items-start gap-3 mb-6"><div class="flex-shrink-0">' + smallMascot(50) + '</div><div class="flex-1">' + bubble('How did you hear about Maintor?', 0.1) + '</div></div><div class="flex-1 space-y-2 overflow-y-auto hide-scrollbar pb-4">' + opts.map(function(o, i) { var sel = howHeard === o; return '<button onclick="setOption(\'howHeard\',\'' + o + '\')" class="option-card w-full p-4 rounded-xl text-left border animate-fade-in" style="background:' + (sel ? C.primaryGlow : C.bgCard) + ';border-color:' + (sel ? C.primary : C.border) + ';color:' + (sel ? C.primary : C.text) + ';font-weight:500;animation-delay:' + (0.1 + i * 0.03) + 's">' + o + '</button>'; }).join('') + '</div></div><div class="p-6 pt-0"><div class="max-w-lg mx-auto">' + primaryBtn('Continue', 'goNext()', !howHeard) + '</div></div></div>';
+    }
+
+    function finalSuccessScreen() {
+      return '<div class="min-h-screen flex flex-col" style="background:' + C.bgDark + '"><div class="flex-1 flex flex-col items-center justify-center p-6"><div class="mb-6 animate-fade-in">' + bubble("You're all set! Let's start your AI learning journey! 🎉") + '</div><div class="animate-pop rounded-full" style="animation-delay:0.3s">' + robotMascot(180, 'excited', true) + '</div></div><div class="p-6">' + primaryBtn('Start Learning', "alert('This is a preview. In the real app, you\\'d now enter the dashboard!')") + '</div></div>';
+    }
+
+    function render() {
+      var app = document.getElementById('app');
+      var html = '';
+      switch(step) {
+        case 0: html = welcomeScreen(); break;
+        case 1: html = introScreen("Hi! I'm your AI learning buddy!"); break;
+        case 2: html = introScreen("Just a few questions to personalize your learning!", "few questions"); break;
+        case 3: html = whatToLearnScreen(); break;
+        case 4: html = whyLearningScreen(); break;
+        case 5: html = experienceScreen(); break;
+        case 6: html = introScreen("Maintor is designed to be fun like a game!"); break;
+        case 7: html = dailyGoalScreen(); break;
+        case 8: html = howHeardScreen(); break;
+        default: html = finalSuccessScreen();
+      }
+      app.innerHTML = html;
+    }
+
+    window.goNext = function() { step++; render(); };
+    window.goBack = function() { if (step > 0) { step--; render(); } };
+    window.setOption = function(field, value) {
+      if (field === 'whatToLearn') whatToLearn = value;
+      if (field === 'whyLearning') whyLearning = value;
+      if (field === 'experience') experience = value;
+      if (field === 'dailyGoal') dailyGoal = value;
+      if (field === 'howHeard') howHeard = value;
+      render();
+    };
+
+    render();
+  </script>
+</body>
+</html>
