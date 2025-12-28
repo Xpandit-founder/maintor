@@ -26,6 +26,7 @@
   <div id="app"></div>
   <script>
     let step = 0;
+    let age = '', name = '', email = '';
     let whatToLearn = '', whyLearning = '', experience = '', dailyGoal = '', pathChoice = '', howHeard = '';
 
     function robotEyes() {
@@ -80,17 +81,61 @@
       return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative"><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + robotMascot(180) + '<h1 style="font-size:48px;font-weight:900;color:#10B981;margin-top:20px;letter-spacing:-1px">maintor</h1><p style="color:#6B7280;font-size:18px;margin-top:8px">Learn AI. For free. Forever.</p></div><div style="padding:20px 20px 40px;max-width:400px;margin:0 auto;width:100%">' + btn('GET STARTED', 'goNext()') + btn('I ALREADY HAVE AN ACCOUNT', 'goNext()', true) + '</div></div>';
     }
 
-    // Screen 3: Hi there
+    // Screen 3: How old are you?
+    function ageScreen() {
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(5);
+      html += '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><h2 style="color:#1F2937;font-size:24px;font-weight:700;margin-bottom:20px">How old are you?</h2>';
+      html += '<div style="position:relative"><input id="ageInput" type="number" placeholder="Age" value="' + age + '" oninput="updateAge(this.value)" style="width:100%;padding:18px;border:2px solid #3B82F6;background:#DBEAFE;border-radius:16px;font-size:17px;color:#1F2937">';
+      if (age) html += '<span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#10B981;font-size:20px">✓</span>';
+      html += '</div></div>';
+      html += '<div style="position:fixed;bottom:0;left:0;right:0;padding:20px;background:#FFF"><div style="max-width:400px;margin:0 auto">' + btn('NEXT', 'goNext()', false, !age) + '</div></div></div>';
+      return html;
+    }
+
+    // Screen 4: What is your name?
+    function nameScreen() {
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(10);
+      html += '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><h2 style="color:#1F2937;font-size:24px;font-weight:700;margin-bottom:20px">What is your name?</h2>';
+      html += '<div style="position:relative;margin-bottom:30px"><input id="nameInput" type="text" placeholder="Name" value="' + name + '" oninput="updateName(this.value)" style="width:100%;padding:18px;border:2px solid #3B82F6;background:#DBEAFE;border-radius:16px;font-size:17px;color:#1F2937">';
+      if (name) html += '<span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#10B981;font-size:20px">✓</span>';
+      html += '</div>';
+      html += btn('NEXT', 'goNext()', false, !name);
+      html += '<div style="text-align:center;margin:24px 0;color:#9CA3AF;font-size:14px;font-weight:700">OR</div>';
+      html += '<button onclick="alert(\'Social sign-up coming soon!\')" style="width:100%;padding:16px;margin-bottom:12px;border:2px solid #E5E7EB;background:#FFF;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:15px;font-weight:600;color:#1F2937;cursor:pointer">';
+      html += '<svg width="20" height="20" viewBox="0 0 20 20"><path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/><path fill="#34A853" d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z"/><path fill="#FBBC05" d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A10.02 10.02 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z"/><path fill="#EA4335" d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z"/></svg>';
+      html += 'SIGN UP WITH GOOGLE</button>';
+      html += '<button onclick="alert(\'Social sign-up coming soon!\')" style="width:100%;padding:16px;margin-bottom:12px;border:2px solid #E5E7EB;background:#FFF;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:15px;font-weight:600;color:#1F2937;cursor:pointer">';
+      html += '<svg width="20" height="20" viewBox="0 0 20 20"><path fill="#1877F2" d="M20 10c0-5.52-4.48-10-10-10S0 4.48 0 10c0 4.99 3.66 9.12 8.44 9.88v-6.99H5.9V10h2.54V7.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.24.19 2.24.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56V10h2.78l-.45 2.89h-2.33v6.99C16.34 19.12 20 14.99 20 10z"/></svg>';
+      html += 'SIGN UP WITH FACEBOOK</button>';
+      html += '<button onclick="alert(\'Social sign-up coming soon!\')" style="width:100%;padding:16px;border:2px solid #E5E7EB;background:#FFF;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:15px;font-weight:600;color:#1F2937;cursor:pointer">';
+      html += '<svg width="20" height="20" viewBox="0 0 20 20"><path fill="#000" d="M17.05 9.36c-.05-1.85-1.34-3.47-3.05-3.97-.62-1.82-2.34-3.14-4.36-3.14-1.6 0-3.02.82-3.85 2.06-2.16.17-3.88 1.96-3.88 4.17 0 2.31 1.87 4.18 4.18 4.18h10.45c1.73 0 3.13-1.4 3.13-3.13 0-.08 0-.15-.01-.23-.2.04-.41.06-.61.06z"/><path fill="#000" d="M10 13l-3.5 3.5L8 18l2-2 2 2 1.5-1.5z"/></svg>';
+      html += 'SIGN UP WITH APPLE</button>';
+      html += '</div></div>';
+      return html;
+    }
+
+    // Screen 5: What is your email address?
+    function emailScreen() {
+      var displayName = name || 'there';
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(15);
+      html += '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><h2 style="color:#1F2937;font-size:24px;font-weight:700;margin-bottom:20px">What is your email address, ' + displayName + '?</h2>';
+      html += '<div style="position:relative"><input id="emailInput" type="email" placeholder="Email" value="' + email + '" oninput="updateEmail(this.value)" style="width:100%;padding:18px;border:2px solid #3B82F6;background:#DBEAFE;border-radius:16px;font-size:17px;color:#1F2937">';
+      html += '</div></div>';
+      html += '<div style="position:fixed;bottom:0;left:0;right:0;padding:20px;background:#FFF"><div style="max-width:400px;margin:0 auto">' + btn('NEXT', 'goNext()', false, !email) + '</div></div></div>';
+      return html;
+    }
+
+    // Screen 6: Hi there
     function introHiScreen() {
-      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Hi there! I'm your AI learning buddy!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
+      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(20) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Hi there! I'm your AI learning buddy!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
     }
 
-    // Screen 4: Quick questions
+    // Screen 7: Quick questions
     function introQuestionsScreen() {
-      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(5) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Just a few quick questions before we start your journey!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
+      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(25) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Just a few quick questions before we start your journey!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
     }
 
-    // Screen 5: What to learn
+    // Screen 8: What to learn
     function whatToLearnScreen() {
       var opts = [
         {id:'chatbots',icon:'💬',label:'AI Chatbots',sub:'ChatGPT, Claude'},
@@ -100,7 +145,7 @@
         {id:'productivity',icon:'⚡',label:'Productivity',sub:'Automation'},
         {id:'all',icon:'🎯',label:'Everything!',sub:'Complete journey'}
       ];
-      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(15) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("What would you like to learn?") + '</div><div style="margin-bottom:100px">';
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(30) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("What would you like to learn?") + '</div><div style="margin-bottom:100px">';
       opts.forEach(function(o) {
         var sel = whatToLearn === o.id;
         html += '<button onclick="setOption(\'whatToLearn\',\'' + o.id + '\')" style="width:100%;padding:18px;margin-bottom:12px;border:2px solid ' + (sel ? '#10B981' : '#E5E7EB') + ';background:' + (sel ? '#D1FAE5' : '#FFF') + ';border-radius:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s"><span style="font-size:28px">' + o.icon + '</span><div style="flex:1;text-align:left"><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:2px">' + o.label + '</p><p style="color:#6B7280;font-size:14px">' + o.sub + '</p></div></button>';
@@ -114,7 +159,7 @@
       return '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#FFF;padding:40px"><div class="animate-pop">' + robotReading(180) + '</div><h2 class="animate-pulse" style="color:#9CA3AF;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-top:30px">COURSE BUILDING...</h2><p class="animate-fade-in" style="color:#6B7280;font-size:17px;text-align:center;margin-top:20px;line-height:1.6;max-width:340px">Get ready to join <strong>thousands of learners</strong> currently mastering AI tools with Maintor!</p></div>';
     }
 
-    // Screen 7: Experience level
+    // Screen 10: Experience level
     function experienceScreen() {
       var levels = [
         {id:'new',bars:1,label:"I'm new to AI",selected:experience==='new'},
@@ -123,7 +168,7 @@
         {id:'experienced',bars:4,label:"I'm quite experienced",selected:experience==='experienced'}
       ];
 
-      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(30) + '<div style="flex:1;padding:70px 20px 20px"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("How much AI do you know?") + '</div><div style="margin-bottom:100px">';
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(40) + '<div style="flex:1;padding:70px 20px 20px"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("How much AI do you know?") + '</div><div style="margin-bottom:100px">';
 
       levels.forEach(function(lv) {
         var sel = lv.selected;
@@ -140,12 +185,12 @@
       return html;
     }
 
-    // Screen 8: Confirmation
+    // Screen 11: Confirmation
     function confirmationScreen() {
-      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(40) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Okay, we'll start fresh!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
+      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(45) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Okay, we'll start fresh!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
     }
 
-    // Screen 9: Let's ace those tests! (Why learning with icons)
+    // Screen 12: Let's ace those tests! (Why learning with icons)
     function whyLearningScreen() {
       var opts = [
         {id:'education',icon:'📖',label:'Support my education'},
@@ -165,15 +210,15 @@
       return html;
     }
 
-    // Screen 10: Learning routine intro
+    // Screen 13: Learning routine intro
     function learningRoutineScreen() {
-      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(60) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Let's set up a learning routine!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
+      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(55) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Let's set up a learning routine!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
     }
 
-    // Screen 11: Daily goal
+    // Screen 14: Daily goal
     function dailyGoalScreen() {
       var opts = [{id:'5',label:'5 min / day',sub:'Casual'},{id:'10',label:'10 min / day',sub:'Regular'},{id:'15',label:'15 min / day',sub:'Serious'},{id:'20',label:'20 min / day',sub:'Intense'}];
-      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(70) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("What's your daily learning goal?") + '</div><div style="margin-bottom:100px">';
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(65) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("What's your daily learning goal?") + '</div><div style="margin-bottom:100px">';
       opts.forEach(function(o) {
         var sel = dailyGoal === o.id;
         html += '<button onclick="setOption(\'dailyGoal\',\'' + o.id + '\')" style="width:100%;padding:20px;margin-bottom:14px;border:2px solid ' + (sel ? '#10B981' : '#E5E7EB') + ';background:' + (sel ? '#D1FAE5' : '#FFF') + ';border-radius:16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s"><span style="font-weight:700;color:#1F2937;font-size:18px">' + o.label + '</span><span style="color:#6B7280;font-size:15px">' + o.sub + '</span></button>';
@@ -182,14 +227,14 @@
       return html;
     }
 
-    // Screen 12: Achievements
+    // Screen 15: Achievements
     function achievementsScreen() {
-      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(80) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:30px"><div>' + smallMascot() + '</div>' + bubble("Here's what you can achieve in 3 months!") + '</div><div style="space-y-20px;margin-bottom:100px"><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">💬</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Converse with confidence</p><p style="color:#6B7280;font-size:14px">Stress-free speaking and listening exercises</p></div></div><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">📚</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Build up your vocabulary</p><p style="color:#6B7280;font-size:14px">Common words and practical phrases</p></div></div><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">⏰</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Develop a learning habit</p><p style="color:#6B7280;font-size:14px">Smart reminders, fun challenges, and more</p></div></div></div></div><div style="position:fixed;bottom:0;left:0;right:0;padding:20px;background:#FFF;border-top:1px solid #E5E7EB"><div style="max-width:400px;margin:0 auto">' + btn('CONTINUE', 'goNext()') + '</div></div></div>';
+      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(75) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:30px"><div>' + smallMascot() + '</div>' + bubble("Here's what you can achieve in 3 months!") + '</div><div style="space-y-20px;margin-bottom:100px"><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">💬</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Converse with confidence</p><p style="color:#6B7280;font-size:14px">Stress-free speaking and listening exercises</p></div></div><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">📚</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Build up your vocabulary</p><p style="color:#6B7280;font-size:14px">Common words and practical phrases</p></div></div><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">⏰</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Develop a learning habit</p><p style="color:#6B7280;font-size:14px">Smart reminders, fun challenges, and more</p></div></div></div></div><div style="position:fixed;bottom:0;left:0;right:0;padding:20px;background:#FFF;border-top:1px solid #E5E7EB"><div style="max-width:400px;margin:0 auto">' + btn('CONTINUE', 'goNext()') + '</div></div></div>';
     }
 
-    // Screen 13: Path choice
+    // Screen 16: Path choice
     function pathChoiceScreen() {
-      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(90) + '<div style="flex:1;padding:70px 20px 20px"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:30px"><div>' + smallMascot() + '</div>' + bubble("Where would you like to start?") + '</div>';
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(85) + '<div style="flex:1;padding:70px 20px 20px"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:30px"><div>' + smallMascot() + '</div>' + bubble("Where would you like to start?") + '</div>';
 
       var sel1 = pathChoice === 'scratch';
       html += '<button onclick="setOption(\'pathChoice\',\'scratch\')" style="width:100%;padding:20px;margin-bottom:16px;border:2px solid ' + (sel1 ? '#10B981' : '#E5E7EB') + ';background:' + (sel1 ? '#D1FAE5' : '#FFF') + ';border-radius:16px;position:relative;cursor:pointer;display:flex;gap:16px;align-items:center"><span style="position:absolute;top:0;right:0;background:#38BDF8;color:#FFF;padding:4px 12px;font-size:11px;font-weight:700;border-radius:0 14px 0 14px">RECOMMENDED</span><div style="width:60px;height:60px;background:#FCD34D;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;position:relative"><div style="font-size:24px;position:absolute;top:8px;left:8px;color:#B45309">📖</div><div style="font-size:28px;font-weight:900;color:#78350F;position:absolute;bottom:8px;right:10px">1</div></div><div style="flex:1;text-align:left"><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Start from scratch</p><p style="color:#6B7280;font-size:14px">Take the easiest lesson of the AI course</p></div></button>';
@@ -201,10 +246,10 @@
       return html;
     }
 
-    // Screen 14: How heard
+    // Screen 17: How heard
     function howHeardScreen() {
       var opts = ['YouTube', 'X (Twitter)', 'TikTok', 'Friends/family', 'Google Search', 'LinkedIn', 'Other'];
-      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(95) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("How did you hear about Maintor?") + '</div><div style="margin-bottom:100px">';
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(90) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("How did you hear about Maintor?") + '</div><div style="margin-bottom:100px">';
       opts.forEach(function(o) {
         var sel = howHeard === o;
         html += '<button onclick="setOption(\'howHeard\',\'' + o + '\')" style="width:100%;padding:18px;margin-bottom:12px;border:2px solid ' + (sel ? '#10B981' : '#E5E7EB') + ';background:' + (sel ? '#D1FAE5' : '#FFF') + ';border-radius:16px;text-align:left;font-weight:700;color:#1F2937;font-size:17px;cursor:pointer;transition:all 0.2s">' + o + '</button>';
@@ -221,39 +266,57 @@
     function render() {
       var app = document.getElementById('app');
       var screens = [
-        splashScreen,           // 0
-        brandingScreen,         // 1
-        getStartedScreen,       // 2
-        introHiScreen,          // 3
-        introQuestionsScreen,   // 4
-        whatToLearnScreen,      // 5
-        courseBuildingScreen,   // 6
-        experienceScreen,       // 7
-        confirmationScreen,     // 8
-        whyLearningScreen,      // 9 - Let's ace those tests!
-        learningRoutineScreen,  // 10 - NEW!
-        dailyGoalScreen,        // 11
-        achievementsScreen,     // 12 - NEW!
-        pathChoiceScreen,       // 13 - NEW!
-        howHeardScreen,         // 14
-        successScreen           // 15
+        splashScreen,           // 0 - Robot eyes splash
+        brandingScreen,         // 1 - Branding
+        getStartedScreen,       // 2 - Get started buttons
+        ageScreen,              // 3 - How old are you? (NEW)
+        nameScreen,             // 4 - What is your name? (NEW)
+        emailScreen,            // 5 - What is your email? (NEW)
+        introHiScreen,          // 6 - Hi there!
+        introQuestionsScreen,   // 7 - Quick questions
+        whatToLearnScreen,      // 8 - What to learn
+        courseBuildingScreen,   // 9 - Course building
+        experienceScreen,       // 10 - Experience level
+        confirmationScreen,     // 11 - Confirmation
+        whyLearningScreen,      // 12 - Let's ace those tests!
+        learningRoutineScreen,  // 13 - Learning routine
+        dailyGoalScreen,        // 14 - Daily goal
+        achievementsScreen,     // 15 - Achievements
+        pathChoiceScreen,       // 16 - Path choice
+        howHeardScreen,         // 17 - How heard
+        successScreen           // 18 - Success
       ];
       app.innerHTML = screens[step] ? screens[step]() : successScreen();
 
       if (step === 0) {
         setTimeout(function() { goNext(); }, 1500);
       }
-      if (step === 6) {
+      if (step === 9) {
         setTimeout(function() { goNext(); }, 2500);
       }
     }
 
     window.goNext = function() {
-      if (step < 15) { step++; render(); }
+      if (step < 18) { step++; render(); }
     };
 
     window.goBack = function() {
-      if (step > 2 && step !== 6) { step--; render(); }
+      if (step > 2 && step !== 9) { step--; render(); }
+    };
+
+    window.updateAge = function(value) {
+      age = value;
+      render();
+    };
+
+    window.updateName = function(value) {
+      name = value;
+      render();
+    };
+
+    window.updateEmail = function(value) {
+      email = value;
+      render();
     };
 
     window.setOption = function(field, value) {
