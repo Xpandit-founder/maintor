@@ -26,34 +26,28 @@
   <div id="app"></div>
   <script>
     let step = 0;
-    let whatToLearn = '', whyLearning = '', experience = '', dailyGoal = '', howHeard = '';
+    let whatToLearn = '', whyLearning = '', experience = '', dailyGoal = '', pathChoice = '', howHeard = '';
 
-    // Robot mascot - simple version showing just eyes
     function robotEyes() {
       return '<div class="animate-float" style="width:200px;height:120px"><svg viewBox="0 0 200 120" fill="none"><circle cx="60" cy="60" r="25" fill="#FFF"/><circle cx="140" cy="60" r="25" fill="#FFF"/><circle cx="60" cy="60" r="18" fill="#047857"/><circle cx="140" cy="60" r="18" fill="#047857"/><circle cx="55" cy="55" r="6" fill="#FFF" opacity="0.9"/><circle cx="135" cy="55" r="6" fill="#FFF" opacity="0.9"/></svg></div>';
     }
 
-    // Robot reading (for loading screen)
     function robotReading(size = 160) {
       return '<div class="animate-float" style="width:' + size + 'px;height:' + (size * 1.2) + 'px"><svg viewBox="0 0 200 240" fill="none"><g style="transform-origin: 140px 45px;animation: antenna-wave 2s ease-in-out infinite;"><line x1="140" y1="45" x2="165" y2="15" stroke="#10B981" stroke-width="4" stroke-linecap="round"/><circle cx="165" cy="15" r="8" fill="#10B981"/><circle cx="165" cy="15" r="5" fill="#34D399" style="animation: blink 2s ease-in-out infinite;"/></g><ellipse cx="100" cy="95" rx="55" ry="50" fill="#10B981" stroke="#059669" stroke-width="3"/><circle cx="75" cy="90" r="15" fill="#FFF"/><circle cx="125" cy="90" r="15" fill="#FFF"/><circle cx="75" cy="90" r="10" fill="#047857"/><circle cx="125" cy="90" r="10" fill="#047857"/><circle cx="70" cy="85" r="4" fill="#FFF" opacity="0.9"/><circle cx="120" cy="85" r="4" fill="#FFF" opacity="0.9"/><ellipse cx="100" cy="110" rx="8" ry="6" fill="#F59E0B"/><path d="M 85 115 Q 100 120 115 115" stroke="#047857" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 60 145 Q 60 180 80 200 L 120 200 Q 140 180 140 145 Z" fill="#10B981" stroke="#059669" stroke-width="3"/><ellipse cx="85" cy="215" rx="18" ry="12" fill="#10B981" stroke="#059669" stroke-width="2"/><ellipse cx="115" cy="215" rx="18" ry="12" fill="#10B981" stroke="#059669" stroke-width="2"/><rect x="70" y="130" width="60" height="45" rx="4" fill="#3B82F6"/><rect x="72" y="132" width="28" height="41" rx="2" fill="#93C5FD"/><rect x="102" y="132" width="26" height="41" rx="2" fill="#93C5FD"/><line x1="75" y1="140" x2="95" y2="140" stroke="#1E3A8A" stroke-width="1.5"/><line x1="75" y1="145" x2="95" y2="145" stroke="#1E3A8A" stroke-width="1.5"/><line x1="105" y1="140" x2="125" y2="140" stroke="#1E3A8A" stroke-width="1.5"/><line x1="105" y1="145" x2="125" y2="145" stroke="#1E3A8A" stroke-width="1.5"/></svg></div>';
     }
 
-    // Full robot mascot
     function robotMascot(size = 140) {
       return '<div class="animate-float" style="width:' + size + 'px;height:' + (size * 1.2) + 'px"><svg viewBox="0 0 200 240" fill="none"><g style="transform-origin: 140px 45px;animation: antenna-wave 2s ease-in-out infinite;"><line x1="140" y1="45" x2="165" y2="15" stroke="#10B981" stroke-width="4" stroke-linecap="round"/><circle cx="165" cy="15" r="8" fill="#10B981"/><circle cx="165" cy="15" r="5" fill="#34D399" style="animation: blink 2s ease-in-out infinite;"/></g><ellipse cx="100" cy="95" rx="55" ry="50" fill="#10B981" stroke="#059669" stroke-width="3"/><circle cx="75" cy="90" r="15" fill="#FFF"/><circle cx="125" cy="90" r="15" fill="#FFF"/><circle cx="75" cy="90" r="10" fill="#047857"/><circle cx="125" cy="90" r="10" fill="#047857"/><circle cx="70" cy="85" r="4" fill="#FFF" opacity="0.9"/><circle cx="120" cy="85" r="4" fill="#FFF" opacity="0.9"/><ellipse cx="100" cy="110" rx="8" ry="6" fill="#F59E0B"/><path d="M 85 115 Q 100 125 115 115" stroke="#047857" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 60 145 Q 60 180 80 200 L 120 200 Q 140 180 140 145 Z" fill="#10B981" stroke="#059669" stroke-width="3"/><ellipse cx="85" cy="215" rx="18" ry="12" fill="#10B981" stroke="#059669" stroke-width="2"/><ellipse cx="115" cy="215" rx="18" ry="12" fill="#10B981" stroke="#059669" stroke-width="2"/></svg></div>';
     }
 
-    // Small mascot for chat
     function smallMascot() {
       return '<div style="width:60px;height:60px"><svg viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="50" rx="35" ry="32" fill="#10B981" stroke="#059669" stroke-width="3"/><circle cx="40" cy="48" r="7" fill="#FFF"/><circle cx="60" cy="48" r="7" fill="#FFF"/><circle cx="40" cy="48" r="5" fill="#047857"/><circle cx="60" cy="48" r="5" fill="#047857"/><circle cx="37" cy="45" r="2" fill="#FFF" opacity="0.9"/><circle cx="57" cy="45" r="2" fill="#FFF" opacity="0.9"/><path d="M 42 62 Q 50 68 58 62" stroke="#047857" stroke-width="2.5" fill="none" stroke-linecap="round"/><line x1="70" y1="25" x2="80" y2="10" stroke="#10B981" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="10" r="5" fill="#10B981"/><circle cx="80" cy="10" r="3" fill="#34D399"/></svg></div>';
     }
 
-    // Speech bubble
     function bubble(text) {
       return '<div class="relative animate-slide-up" style="max-width:320px;margin:0 auto 20px"><div style="background:#FFF;padding:16px 20px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)"><p style="color:#1F2937;font-size:16px;line-height:1.4;text-align:center">' + text + '</p></div><div style="position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #FFF"></div></div>';
     }
 
-    // Button
     function btn(text, action, secondary, disabled) {
       if (secondary) {
         return '<button onclick="' + action + '" style="width:100%;padding:18px;border:none;border-radius:16px;font-size:15px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;background:transparent;color:#10B981;border:3px solid #10B981;transition:all 0.2s">' + text + '</button>';
@@ -63,32 +57,30 @@
       return '<button onclick="' + action + '" ' + (disabled ? 'disabled' : '') + ' style="width:100%;padding:18px;border:none;border-radius:16px;font-size:15px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;cursor:' + (disabled ? 'not-allowed' : 'pointer') + ';background:' + bgColor + ';color:' + textColor + ';box-shadow:' + (disabled ? 'none' : '0 4px 0 #059669') + ';transition:all 0.2s;margin-bottom:12px">' + text + '</button>';
     }
 
-    // Back button
     function backBtn() {
       return '<button onclick="goBack()" style="position:absolute;top:20px;left:20px;background:none;border:none;padding:8px;cursor:pointer;z-index:10"><svg width="24" height="24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>';
     }
 
-    // Progress bar
     function progressBar(pct) {
       return '<div style="position:absolute;top:20px;left:60px;right:20px;height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden"><div style="height:100%;background:#10B981;width:' + pct + '%;transition:width 0.3s;border-radius:4px"></div></div>';
     }
 
-    // Screen 0: Splash - just mascot eyes on green
+    // Screen 0: Splash
     function splashScreen() {
       return '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#10B981"><div class="animate-pop">' + robotEyes() + '</div></div>';
     }
 
-    // Screen 1: Branding with white circle
+    // Screen 1: Branding
     function brandingScreen() {
       return '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#10B981;padding:20px"><div class="animate-pop" style="background:#FFF;border-radius:50%;width:340px;height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 40px rgba(0,0,0,0.1)">' + robotMascot(160) + '<h1 style="font-size:48px;font-weight:900;color:#10B981;margin-top:20px;letter-spacing:-1px">maintor</h1><p style="color:#6B7280;font-size:18px;margin-top:8px">Learn AI. For free. Forever.</p></div></div>';
     }
 
-    // Screen 2: Get Started buttons
+    // Screen 2: Get Started
     function getStartedScreen() {
       return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative"><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + robotMascot(180) + '<h1 style="font-size:48px;font-weight:900;color:#10B981;margin-top:20px;letter-spacing:-1px">maintor</h1><p style="color:#6B7280;font-size:18px;margin-top:8px">Learn AI. For free. Forever.</p></div><div style="padding:20px 20px 40px;max-width:400px;margin:0 auto;width:100%">' + btn('GET STARTED', 'goNext()') + btn('I ALREADY HAVE AN ACCOUNT', 'goNext()', true) + '</div></div>';
     }
 
-    // Screen 3: Hi there intro
+    // Screen 3: Hi there
     function introHiScreen() {
       return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Hi there! I'm your AI learning buddy!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
     }
@@ -98,7 +90,7 @@
       return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(5) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Just a few quick questions before we start your journey!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
     }
 
-    // Screen 5: What to learn (with icons like Duolingo)
+    // Screen 5: What to learn
     function whatToLearnScreen() {
       var opts = [
         {id:'chatbots',icon:'💬',label:'AI Chatbots',sub:'ChatGPT, Claude'},
@@ -117,12 +109,12 @@
       return html;
     }
 
-    // Screen 6: Course Building (loading screen)
+    // Screen 6: Course Building
     function courseBuildingScreen() {
       return '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#FFF;padding:40px"><div class="animate-pop">' + robotReading(180) + '</div><h2 class="animate-pulse" style="color:#9CA3AF;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-top:30px">COURSE BUILDING...</h2><p class="animate-fade-in" style="color:#6B7280;font-size:17px;text-align:center;margin-top:20px;line-height:1.6;max-width:340px">Get ready to join <strong>thousands of learners</strong> currently mastering AI tools with Maintor!</p></div>';
     }
 
-    // Screen 7: Experience level (with progress bars like Duolingo)
+    // Screen 7: Experience level
     function experienceScreen() {
       var levels = [
         {id:'new',bars:1,label:"I'm new to AI",selected:experience==='new'},
@@ -148,22 +140,23 @@
       return html;
     }
 
-    // Screen 8: Confirmation ("Okay, we'll start fresh!")
+    // Screen 8: Confirmation
     function confirmationScreen() {
-      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(45) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Okay, we'll start fresh!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
+      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(40) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Okay, we'll start fresh!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
     }
 
-    // Screen 9: Why learning
+    // Screen 9: Let's ace those tests! (Why learning with icons)
     function whyLearningScreen() {
       var opts = [
-        {id:'career',icon:'💼',label:'Boost my career'},
-        {id:'productivity',icon:'🧠',label:'Be more productive'},
+        {id:'education',icon:'📖',label:'Support my education'},
         {id:'fun',icon:'🎉',label:'Just for fun'},
-        {id:'creative',icon:'🎨',label:'Creative projects'},
-        {id:'business',icon:'📈',label:'Grow my business'},
-        {id:'curious',icon:'🔍',label:'Stay curious'}
+        {id:'connect',icon:'👥',label:'Connect with people'},
+        {id:'productive',icon:'🧠',label:'Spend time productively'},
+        {id:'career',icon:'💼',label:'Boost my career'},
+        {id:'travel',icon:'✈️',label:'Prepare for travel'},
+        {id:'other',icon:'💭',label:'Other'}
       ];
-      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(60) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("Why do you want to learn AI?") + '</div><div style="margin-bottom:100px">';
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(50) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("Let's ace those tests!") + '</div><div style="margin-bottom:100px">';
       opts.forEach(function(o) {
         var sel = whyLearning === o.id;
         html += '<button onclick="setOption(\'whyLearning\',\'' + o.id + '\')" style="width:100%;padding:18px;margin-bottom:12px;border:2px solid ' + (sel ? '#10B981' : '#E5E7EB') + ';background:' + (sel ? '#D1FAE5' : '#FFF') + ';border-radius:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s"><span style="font-size:28px">' + o.icon + '</span><p style="flex:1;text-align:left;font-weight:700;color:#1F2937;font-size:17px">' + o.label + '</p></button>';
@@ -172,10 +165,15 @@
       return html;
     }
 
-    // Screen 10: Daily goal
+    // Screen 10: Learning routine intro
+    function learningRoutineScreen() {
+      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(60) + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">' + bubble("Let's set up a learning routine!") + '<div class="animate-pop">' + robotMascot(180) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('CONTINUE', 'goNext()') + '</div></div>';
+    }
+
+    // Screen 11: Daily goal
     function dailyGoalScreen() {
       var opts = [{id:'5',label:'5 min / day',sub:'Casual'},{id:'10',label:'10 min / day',sub:'Regular'},{id:'15',label:'15 min / day',sub:'Serious'},{id:'20',label:'20 min / day',sub:'Intense'}];
-      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(80) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("What's your daily learning goal?") + '</div><div style="margin-bottom:100px">';
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(70) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("What's your daily learning goal?") + '</div><div style="margin-bottom:100px">';
       opts.forEach(function(o) {
         var sel = dailyGoal === o.id;
         html += '<button onclick="setOption(\'dailyGoal\',\'' + o.id + '\')" style="width:100%;padding:20px;margin-bottom:14px;border:2px solid ' + (sel ? '#10B981' : '#E5E7EB') + ';background:' + (sel ? '#D1FAE5' : '#FFF') + ';border-radius:16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s"><span style="font-weight:700;color:#1F2937;font-size:18px">' + o.label + '</span><span style="color:#6B7280;font-size:15px">' + o.sub + '</span></button>';
@@ -184,7 +182,26 @@
       return html;
     }
 
-    // Screen 11: How heard
+    // Screen 12: Achievements
+    function achievementsScreen() {
+      return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(80) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:30px"><div>' + smallMascot() + '</div>' + bubble("Here's what you can achieve in 3 months!") + '</div><div style="space-y-20px;margin-bottom:100px"><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">💬</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Converse with confidence</p><p style="color:#6B7280;font-size:14px">Stress-free speaking and listening exercises</p></div></div><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">📚</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Build up your vocabulary</p><p style="color:#6B7280;font-size:14px">Common words and practical phrases</p></div></div><div style="display:flex;gap:16px;align-items:start;padding:16px;background:#F9FAFB;border-radius:16px;margin-bottom:16px"><span style="font-size:32px">⏰</span><div><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Develop a learning habit</p><p style="color:#6B7280;font-size:14px">Smart reminders, fun challenges, and more</p></div></div></div></div><div style="position:fixed;bottom:0;left:0;right:0;padding:20px;background:#FFF;border-top:1px solid #E5E7EB"><div style="max-width:400px;margin:0 auto">' + btn('CONTINUE', 'goNext()') + '</div></div></div>';
+    }
+
+    // Screen 13: Path choice
+    function pathChoiceScreen() {
+      var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(90) + '<div style="flex:1;padding:70px 20px 20px"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:30px"><div>' + smallMascot() + '</div>' + bubble("Where would you like to start?") + '</div>';
+
+      var sel1 = pathChoice === 'scratch';
+      html += '<button onclick="setOption(\'pathChoice\',\'scratch\')" style="width:100%;padding:20px;margin-bottom:16px;border:2px solid ' + (sel1 ? '#10B981' : '#E5E7EB') + ';background:' + (sel1 ? '#D1FAE5' : '#FFF') + ';border-radius:16px;position:relative;cursor:pointer;display:flex;gap:16px;align-items:center"><span style="position:absolute;top:0;right:0;background:#38BDF8;color:#FFF;padding:4px 12px;font-size:11px;font-weight:700;border-radius:0 14px 0 14px">RECOMMENDED</span><div style="width:60px;height:60px;background:#FCD34D;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;position:relative"><div style="font-size:24px;position:absolute;top:8px;left:8px;color:#B45309">📖</div><div style="font-size:28px;font-weight:900;color:#78350F;position:absolute;bottom:8px;right:10px">1</div></div><div style="flex:1;text-align:left"><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Start from scratch</p><p style="color:#6B7280;font-size:14px">Take the easiest lesson of the AI course</p></div></button>';
+
+      var sel2 = pathChoice === 'level';
+      html += '<button onclick="setOption(\'pathChoice\',\'level\')" style="width:100%;padding:20px;border:2px solid ' + (sel2 ? '#10B981' : '#E5E7EB') + ';background:' + (sel2 ? '#D1FAE5' : '#FFF') + ';border-radius:16px;cursor:pointer;display:flex;gap:16px;align-items:center"><div style="width:60px;height:60px;background:#DBEAFE;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #3B82F6;position:relative"><div style="width:20px;height:20px;background:#3B82F6;clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);transform:rotate(45deg)"></div></div><div style="flex:1;text-align:left"><p style="font-weight:700;color:#1F2937;font-size:17px;margin-bottom:4px">Find my level</p><p style="color:#6B7280;font-size:14px">Let Maintor recommend where you should start learning</p></div></button>';
+
+      html += '</div><div style="position:fixed;bottom:0;left:0;right:0;padding:20px;background:#FFF;border-top:1px solid #E5E7EB"><div style="max-width:400px;margin:0 auto">' + btn('CONTINUE', 'goNext()', false, !pathChoice) + '</div></div></div>';
+      return html;
+    }
+
+    // Screen 14: How heard
     function howHeardScreen() {
       var opts = ['YouTube', 'X (Twitter)', 'TikTok', 'Friends/family', 'Google Search', 'LinkedIn', 'Other'];
       var html = '<div style="min-height:100vh;display:flex;flex-direction:column;background:#FFF;position:relative">' + backBtn() + progressBar(95) + '<div style="flex:1;padding:70px 20px 20px;overflow-y:auto"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:24px"><div>' + smallMascot() + '</div>' + bubble("How did you hear about Maintor?") + '</div><div style="margin-bottom:100px">';
@@ -196,7 +213,7 @@
       return html;
     }
 
-    // Screen 12: Success
+    // Screen 15: Success
     function successScreen() {
       return '<div style="min-height:100vh;display:flex;flex-direction:column;background:#10B981;position:relative"><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px"><div class="animate-pop" style="background:#FFF;border-radius:50%;width:340px;height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 40px rgba(0,0,0,0.15)">' + bubble("You're all set! Let's start your AI learning journey! 🎉") + robotMascot(160) + '</div></div><div style="padding:20px;max-width:400px;margin:0 auto;width:100%">' + btn('START LEARNING', 'alert("This is a preview. In the real app, you would now enter the dashboard!")') + '</div></div>';
     }
@@ -210,17 +227,19 @@
         introHiScreen,          // 3
         introQuestionsScreen,   // 4
         whatToLearnScreen,      // 5
-        courseBuildingScreen,   // 6 - NEW!
-        experienceScreen,       // 7 - Updated with bars
-        confirmationScreen,     // 8 - NEW!
-        whyLearningScreen,      // 9
-        dailyGoalScreen,        // 10
-        howHeardScreen,         // 11
-        successScreen           // 12
+        courseBuildingScreen,   // 6
+        experienceScreen,       // 7
+        confirmationScreen,     // 8
+        whyLearningScreen,      // 9 - Let's ace those tests!
+        learningRoutineScreen,  // 10 - NEW!
+        dailyGoalScreen,        // 11
+        achievementsScreen,     // 12 - NEW!
+        pathChoiceScreen,       // 13 - NEW!
+        howHeardScreen,         // 14
+        successScreen           // 15
       ];
       app.innerHTML = screens[step] ? screens[step]() : successScreen();
 
-      // Auto-advance splash and loading screens
       if (step === 0) {
         setTimeout(function() { goNext(); }, 1500);
       }
@@ -230,7 +249,7 @@
     }
 
     window.goNext = function() {
-      if (step < 12) { step++; render(); }
+      if (step < 15) { step++; render(); }
     };
 
     window.goBack = function() {
@@ -242,6 +261,7 @@
       if (field === 'whyLearning') whyLearning = value;
       if (field === 'experience') experience = value;
       if (field === 'dailyGoal') dailyGoal = value;
+      if (field === 'pathChoice') pathChoice = value;
       if (field === 'howHeard') howHeard = value;
       render();
     };
